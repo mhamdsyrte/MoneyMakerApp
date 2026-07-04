@@ -1,0 +1,1152 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Money Maker | المساعد الذكي الشامل</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            DEFAULT: '#22c55e',
+                            dark: '#15803d',
+                            bg: '#09090b'
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    
+    <style>
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #18181b; }
+        ::-webkit-scrollbar-thumb { background: #27272a; border-radius: 3px; }
+        ::-webkit-scrollbar-thumb:hover { background: #22c55e; }
+    </style>
+</head>
+<body class="bg-[#09090b] text-zinc-100 font-sans h-screen w-screen overflow-hidden relative">
+
+    <iframe src="https://money3maker.com/" class="w-full h-full border-none relative z-0" referrerPolicy="no-referrer"></iframe>
+
+    <div class="fixed bottom-6 right-6 z-[99999] flex flex-col items-end gap-3">
+        
+        <div id="popup-menu" class="hidden bg-zinc-950/95 border border-zinc-800 rounded-2xl p-2.5 shadow-2xl backdrop-blur-xl flex flex-col gap-1 w-64 text-right z-[99999]">
+            <div class="px-3 py-2 border-b border-zinc-900 flex items-center justify-between mb-1.5 bg-zinc-900/40 rounded-lg">
+                <span class="text-[10px] text-brand font-extrabold tracking-wider uppercase">لوحة المساعدة الذكية</span>
+                <button onclick="toggleMenu()" class="p-1 hover:bg-zinc-850 rounded text-zinc-400 hover:text-white transition-all">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+            
+            <button onclick="openModal('chat')" class="w-full text-right flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-green-500/10 text-zinc-200 hover:text-brand transition-all group">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center text-brand group-hover:bg-green-500/20 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path></svg>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold block">🤖 المساعد الذكي</span>
+                        <span class="text-[9px] text-zinc-500">اسأل عن أي شيء في المتجر</span>
+                    </div>
+                </div>
+            </button>
+
+            <button onclick="openModal('prices')" class="w-full text-right flex items-center justify-between px-3 py-2.5 rounded-xl hover:bg-green-500/10 text-zinc-200 hover:text-brand transition-all group border-t border-zinc-900 mt-1 pt-2">
+                <div class="flex items-center gap-3">
+                    <div class="w-8 h-8 rounded-lg bg-green-500/10 flex items-center justify-center text-brand group-hover:bg-green-500/20 transition-colors">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>
+                    </div>
+                    <div>
+                        <span class="text-xs font-bold block">💱 أسعار الصرف</span>
+                        <span class="text-[9px] text-zinc-500">آخر تحديث من القناة</span>
+                    </div>
+                </div>
+            </button>
+        </div>
+
+        <button onclick="toggleMenu()" class="w-14 h-14 bg-brand hover:bg-green-400 text-zinc-950 rounded-full flex items-center justify-center shadow-[0_0_25px_rgba(34,197,94,0.45)] border border-green-400/40 transition-all duration-200 hover:scale-105 active:scale-95 z-[99999] cursor-pointer">
+            <svg id="menu-icon" class="w-6 h-6 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+        </button>
+    </div>
+
+    <div id="modal-overlay" class="hidden fixed inset-0 bg-black/85 backdrop-blur-md z-[100000] flex items-center justify-center p-4">
+        <div class="absolute inset-0 cursor-zoom-out" onclick="closeModal()"></div>
+
+        <div id="modal-card" class="bg-zinc-900 border border-zinc-800/80 rounded-[28px] w-full max-w-xl max-h-[85vh] flex flex-col overflow-hidden relative shadow-[0_20px_60px_-15px_rgba(0,0,0,0.6)] z-10 text-right ring-1 ring-white/5">
+            
+            <div class="px-5 py-4 border-b border-zinc-800/80 flex items-center justify-between bg-gradient-to-l from-zinc-950 via-zinc-950 to-zinc-900/60">
+                <div class="flex items-center gap-3">
+                    <span id="modal-icon-container" class="w-9 h-9 rounded-xl bg-brand/10 border border-brand/20 flex items-center justify-center text-brand"></span>
+                    <div>
+                        <h3 id="modal-title" class="font-extrabold text-white text-[13px] tracking-tight">العنوان</h3>
+                        <p class="text-[10px] text-zinc-500 mt-0.5">Money Maker</p>
+                    </div>
+                </div>
+                
+                <button onclick="closeModal()" class="w-8 h-8 flex items-center justify-center bg-zinc-800/70 hover:bg-red-500/15 hover:text-red-400 text-zinc-400 rounded-full transition-all border border-zinc-700/60 active:scale-90">
+                    <svg class="w-4 h-4 stroke-[2.5]" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+                </button>
+            </div>
+
+            <div id="modal-body" class="p-5 overflow-y-auto flex-1 text-zinc-200 text-xs leading-relaxed">
+            </div>
+
+            <div id="prices-footer" class="hidden p-4 bg-zinc-950/40 border-t border-zinc-850 flex items-center justify-between">
+                <button onclick="closeModal()" class="px-7 py-2 text-xs font-bold bg-brand hover:bg-green-400 text-zinc-950 rounded-xl transition-all active:scale-95 cursor-pointer">موافق</button>
+                <button onclick="refreshPrices()" class="text-xs font-bold text-zinc-300 hover:text-brand transition-colors cursor-pointer">تحديث الآن</button>
+            </div>
+
+            <div id="chat-suggestions" class="hidden px-4 pt-3 pb-2.5 bg-zinc-950/30 border-t border-zinc-850/60 overflow-x-auto whitespace-nowrap flex gap-2" style="scrollbar-width: none; -ms-overflow-style: none;">
+                <button onclick="sendSuggestion('شحن ببجي')" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold text-zinc-200 hover:text-brand bg-zinc-900/80 hover:bg-brand/10 border border-zinc-800 hover:border-brand/30 rounded-full transition-all whitespace-nowrap cursor-pointer shadow-sm">🎮 شحن ببجي</button>
+                <button onclick="sendSuggestion('أسعار الصرف الحالية')" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold text-zinc-200 hover:text-brand bg-zinc-900/80 hover:bg-brand/10 border border-zinc-800 hover:border-brand/30 rounded-full transition-all whitespace-nowrap cursor-pointer shadow-sm">💱 أسعار الصرف</button>
+                <button onclick="sendSuggestion('كم سعر 100 دولار بالليرة السورية؟')" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold text-zinc-200 hover:text-brand bg-zinc-900/80 hover:bg-brand/10 border border-zinc-800 hover:border-brand/30 rounded-full transition-all whitespace-nowrap cursor-pointer shadow-sm">🧮 تحويل العملات</button>
+                <button onclick="sendSuggestion('كيف أسوي حساب جديد؟')" class="inline-flex items-center gap-1.5 px-3.5 py-2 text-[11px] font-semibold text-zinc-200 hover:text-brand bg-zinc-900/80 hover:bg-brand/10 border border-zinc-800 hover:border-brand/30 rounded-full transition-all whitespace-nowrap cursor-pointer shadow-sm">📝 فتح حساب</button>
+            </div>
+
+            <div id="chat-footer" class="hidden p-3.5 bg-zinc-950/95 border-t border-zinc-800 flex items-center gap-2">
+                <input type="text" id="userInput" placeholder="اكتب سؤالك هنا..." class="flex-1 bg-zinc-900 text-white placeholder-zinc-500 px-4 py-3 text-xs rounded-full border border-zinc-800 focus:border-brand/60 focus:ring-2 focus:ring-brand/10 focus:outline-none transition-all text-right">
+                <button onclick="sendAI()" class="w-11 h-11 shrink-0 rounded-full bg-brand hover:bg-green-400 active:scale-90 text-zinc-950 flex items-center justify-center transition-all shadow-[0_4px_14px_rgba(34,197,94,0.35)]">
+                    <svg class="w-4.5 h-4.5" width="18" height="18" fill="none" stroke="currentColor" viewBox="0 0 24 24" stroke-width="2.5"><path stroke-linecap="round" stroke-linejoin="round" d="M12 19V5M5 12l7-7 7 7"></path></svg>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function nativeHttpPost(url, headers, bodyObj) {
+            return new Promise((resolve, reject) => {
+                if (!window.AndroidBridge) { reject(new Error('no bridge')); return; }
+                const id = 'c'+Date.now()+Math.random().toString(36).slice(2);
+                window.__nativeHttpCallback = function(cid, json) {
+                    if (cid !== id) return;
+                    const r = JSON.parse(json);
+                    resolve({ ok: r.status>=200&&r.status<300, status:r.status, json:()=>Promise.resolve(JSON.parse(r.body)), text:()=>Promise.resolve(r.body) });
+                };
+                window.AndroidBridge.httpPost(id, url, JSON.stringify(headers), JSON.stringify(bodyObj));
+            });
+        }
+
+        const GEMINI_API_KEY = "__GEMINI_API_KEY__";
+        const GROQ_API_KEY = "__GROQ_API_KEY__";
+        const HF_API_KEY = "__HF_API_KEY__";
+        
+        const PRODUCTS_API_TOKEN = "f9d0a1ffda10b22f5e0ad2dbc64142466e8ef49ef5714bc2";
+        const PRODUCTS_API_URL = "https://api.money3maker.com/client/api/products";
+        
+        const BOT_TOKEN = "8681868701:AAFF-Jn7Mlz_cEgbjddWnYW8Q21d2rjmHFo";
+        const TARGET_CHANNEL_USERNAME = "@mjhffgfu";
+        const TARGET_CHANNEL_ID = -1002494467538;
+
+        const BASE_CURRENCY = "SYP";
+        const BASE_CURRENCY_LABEL = "ليرة سورية";
+
+        const SITE_INFO = {
+            name: "Money Maker",
+            url: "money3maker.com",
+            support: {
+                whatsapp: "963948387337",
+                telegram: "@Money3Maker_Admin",
+                email: "support@money3maker.com"
+            },
+            social: {
+                telegram_channel: "@mjhffgfu",
+                instagram: "@money3maker_admin"
+            },
+            payment: ["تحويل بنكي", "باي بال", "ويسترن يونيون", "حوالة مالية", "USDT"],
+            features: ["شحن الألعاب", "منتجات رقمية", "بطاقات هدايا", "اشتراكات"]
+        };
+
+        const STORE_KNOWLEDGE = `
+متجر Money Maker هو متجر إلكتروني شامل للخدمات الرقمية وتحويل الأموال، يقدم أكثر من 100 خدمة مختلفة وأكثر من 10 طرق إيداع وسحب.
+
+🎮 شحن الألعاب (أكثر من 50 لعبة، من أبرزها):
+ببجي موبايل (PUBG)، فري فاير، كلاش أوف كلانس، كول أوف ديوتي موبايل، كلاش رويال، قتال الزعماء، جواكر، موبايل ليجند، دلتا فورس، هاي داي، براول ستارز، فورتنايت، وألعاب أخرى كثيرة.
+
+📱 رصيد الهاتف:
+سيرياتيل، MTN، ألفا لبنان، توتش لبنان، رصيد توكسيل زين العراق، رصيد آسياسيل، وارسيل.
+
+💸 تحويلات مالية دولية:
+سوريا، مصر، لبنان، الأردن، العراق، تركيا، وتحويلات بنكية رقمية عبر USDT وعملات رقمية أخرى مثل BTC وETH وTRX. كذلك مكاتب تسليم أموال باليد داخل سوريا.
+
+📺 اشتراكات مشاهدة:
+نتفليكس، شاهد VIP، شاموما TV، OSN+، IPTV، لوك تي في، اشتراك بلو 4K.
+
+📲 خدمات حسابات وسوشال ميديا:
+أرقام واتساب، تيليجرام، آيكلاود، فيسبوك، تيك توك، سيغنال، إيمو، جيميل. توثيق حسابات تيليجرام بريميوم، يوتيوب بريميوم، سناب شات باس، نجوم تيليجرام. كذلك خدمات إعلانية: إنشاء فيديوهات وحملات وبوستات وصور إعلانية، وإضافة أموال للحسابات الإعلانية.
+
+🤖 اشتراكات أنظمة وتطبيقات:
+ChatGPT، Google Gemini، Gamma AI Pro، Leonardo AI، Microsoft Office 365، Adobe Premium، مفاتيح ويندوز وأوفيس برو.
+
+🎁 بطاقات رقمية:
+جوجل بلاي، آيتونز، بلايستيشن، ستيم، ريزر جولد، نينتندو، شي إن (SHEIN)، بليزارد، جيم ستوب، إكس بوكس، أمازون.
+
+💳 طرق الإيداع المتاحة:
+باي بال، USDT، سي والت (C-Wallet)، وأكثر من 10 محافظ رقمية (بينانس، ميكسي، كوين إكس، وغيرها)، ويب موني، فوري باي، شام كاش، حوالات مالية (الهرم، موني ترانسفر، الفؤاد، البركة)، بنك سوريا الدولي الإسلامي، فودافون كاش، إنستاباي، آسياسيل، زين كاش العراق، ويش موني، بنوك تركيا، فيزا/ماستركارد.
+
+📜 سياسة الخصوصية وشروط الخدمة (ملخص):
+- نجمع المعلومات الشخصية (الاسم، البريد، الهاتف، بيانات الدفع)، بيانات المعاملات، وبيانات الاستخدام، ونستخدمها لتنفيذ الطلبات وتحسين الخدمة ومنع الاحتيال، ولا نبيعها أو نشاركها مع أي طرف ثالث إلا للامتثال القانوني أو تنفيذ الدفع عبر مزودي الخدمة.
+- مدة مراجعة الطلب: لا تتم المراجعة قبل مرور 30 دقيقة من إنشاء الطلب، ولا بعد مرور 24 ساعة على تقديمه.
+- لا يمكن استرجاع الأموال بعد إتمام عملية الشحن أو التحويل.
+- الاعتراض على أي مشكلة يتم فقط من داخل الطلب نفسه (وليس عبر واتساب) لضمان معالجته رسمياً.
+- يجب الالتزام بالمبلغ المحدد تماماً حسب طريقة الدفع؛ أي دفعة أقل أو أكثر لن تُقبل.
+- يُمنع منعاً باتاً مشاركة أسعار المنتجات مع أي طرف ثالث، وأي مخالفة قد تؤدي لإيقاف الحساب وتجميد الأموال.
+- يجب تسجيل بيانات حقيقية ودقيقة لضمان إمكانية الدعم عند فقدان كلمة المرور أو وجود مشكلة بالحساب.
+- عند إرسال حوالة مالية يجب إرفاق صورة واضحة لإشعار التحويل، وإلا لن يُقبل الطلب.
+- جميع خدمات المتجر رقمية بالكامل وتُسلَّم مباشرة داخل الحساب أو عبر الكود/الرصيد إلكترونياً؛ لا يوجد لدينا أي خدمة توصيل مادي أو شحن فعلي لأي منتج ملموس.
+- المتجر لا يقدّم أي خدمة استثمار أو تداول أو محفظة استثمارية من أي نوع؛ خدماتنا تقتصر على الشحن الرقمي والتحويلات المالية المذكورة أعلاه فقط.
+
+🔐 إنشاء حساب وتسجيل الدخول (اشرحها بهذا الترتيب بالضبط إذا سأل العميل):
+1. البريد الإلكتروني: يُستخدم كمعرّف دخول أساسي، ولازم يكون بريداً حقيقياً يملكه العميل فعلاً لأنه سيصله رابط أو كود تأكيد الحساب بعد التسجيل مباشرة.
+2. تأكيد البريد الإلكتروني: خطوة إلزامية بعد التسجيل، يضغط فيها العميل على رابط التفعيل المرسل لبريده أو يدخل كود التحقق، والحساب لا يعمل بشكل كامل قبل إتمامها.
+3. كلمة المرور: يختارها العميل بنفسه عند التسجيل، ويُفضّل أن تكون قوية (حروف وأرقام)، وهي المسؤول الوحيد عن حماية حسابه ورصيده.
+4. رقم الهاتف: يُستخدم للتواصل عند الحاجة ولتأكيد هوية صاحب الحساب عند وجود أي استفسار على الطلبات.
+5. الاسم الكامل: يجب إدخاله بشكل حقيقي ودقيق مطابق لاسم العميل الحقيقي، لأنه هو نفسه الاسم المطلوب لاحقاً في التوثيق.
+6. تحديد الدولة والمنطقة: يحدد العميل بلده ومنطقته السكنية عند التسجيل، وهذا يُستخدم لعرض وسائل الدفع والتحويل المتاحة في منطقته تحديداً.
+7. تحديد العملة: يختار العميل العملة التي يفضل رؤية الأسعار بها داخل حسابه، مع العلم أن العملة الأساسية المخزَّنة فعلياً في نظام المتجر هي الليرة السورية دائماً بغض النظر عن هذا الاختيار.
+- تسجيل الدخول لاحقاً يتم بنفس البريد الإلكتروني وكلمة المرور فقط.
+- إذا نسي العميل كلمة المرور، يستخدم خيار "نسيت كلمة المرور" من صفحة الدخول لإعادة تعيينها عبر بريده الإلكتروني المسجَّل.
+
+🪪 توثيق الحساب (التحقق من الهوية):
+- التوثيق هو خطوة إضافية اختيارية أو مطلوبة لبعض العمليات (مثل التحويلات المالية بمبالغ أكبر)، هدفها التأكد أن صاحب الحساب شخص حقيقي وموجود فعلاً.
+- يتطلب عادة: الاسم الكامل مطابقاً تماماً للاسم المسجَّل بالحساب، ورقم الهوية الوطنية (أو أي وثيقة رسمية مكافئة حسب بلد العميل)، وأحياناً صورة واضحة للوثيقة من الجهتين (الأمامية والخلفية).
+- بعد رفع البيانات، تتم مراجعتها من فريق الدعم يدوياً، وقد تستغرق بعض الوقت قبل تفعيل التوثيق على الحساب.
+- إذا سأل العميل عن تفاصيل التوثيق الدقيقة لحالته الخاصة أو واجه مشكلة فيه، وجّهه مباشرة لواتساب الدعم لأن كل حالة قد تختلف قليلاً حسب بلد العميل ونوع العملية.
+
+📞 معرّفات التواصل والدعم الرسمية (معرّفات فقط، وليست روابط):
+- واتساب الدعم: 963948387337
+- تيليجرام الإدارة: @Money3Maker_Admin
+- قناة أسعار الصرف على تيليجرام: @mjhffgfu
+- إنستغرام: @money3maker_admin
+- بريد الدعم: support@money3maker.com
+`.trim();
+
+        let latestPriceMessage = null;
+        let cachedProducts = null;
+        let productsLastFetch = 0;
+        const CACHE_DURATION = 10 * 60 * 1000;
+
+        let currentModalType = null;
+        let chatMessages = [
+            { sender: 'ai', text: '👋 أهلاً بك في متجر Money Maker!\n\nأنا مساعدك الذكي، أقدر أساعدك في:\n🎮 البحث عن منتجات الشحن\n💱 عرض أسعار الصرف وتحويل العملات\n📝 فتح حساب وطرق الدفع\n📞 أرقام الدعم والتواصل\n\nاكتب سؤالك وسأجيبك فوراً!' }
+        ];
+
+        function toggleMenu() {
+            document.getElementById('popup-menu').classList.toggle('hidden');
+        }
+
+        window.onAuthCallback = function (callbackUrl) {
+            try {
+                const parsed = new URL(callbackUrl);
+                const token = parsed.searchParams.get('token') || parsed.searchParams.get('access_token');
+                if (token) {
+                    location.href = `file:///android_asset/index.html?token=${encodeURIComponent(token)}`;
+                }
+            } catch (e) {}
+        };
+
+        window.onPullToRefresh = function () {
+            productsLastFetch = 0;
+            fetchProducts(true);
+            fetchLatestPriceFromChannel();
+        };
+
+        async function fetchLatestPriceFromChannel() {
+            try {
+                const url = `https://api.telegram.org/bot${BOT_TOKEN}/getUpdates?limit=100&offset=-100`;
+                const res = await fetch(url);
+                
+                if (!res.ok) return latestPriceMessage;
+                
+                const data = await res.json();
+                
+                if (!data.ok || !data.result) return latestPriceMessage;
+                
+                const channelMessages = data.result
+                    .filter(update => {
+                        const post = update.channel_post || update.edited_channel_post;
+                        if (!post) return false;
+                        const chat = post.chat;
+                        return chat.id === TARGET_CHANNEL_ID ||
+                               (chat.username && chat.username.toLowerCase() === TARGET_CHANNEL_USERNAME.replace('@', '').toLowerCase());
+                    })
+                    .sort((a, b) => b.update_id - a.update_id);
+                
+                if (channelMessages.length > 0) {
+                    const latestUpdate = channelMessages[0];
+                    const latestMsg = latestUpdate.channel_post || latestUpdate.edited_channel_post;
+                    
+                    latestPriceMessage = {
+                        text: latestMsg.text || latestMsg.caption || '',
+                        date: new Date(latestMsg.date * 1000)
+                    };
+                }
+                
+                return latestPriceMessage;
+                
+            } catch (error) {
+                return latestPriceMessage;
+            }
+        }
+
+        function parseExchangeRates(priceText) {
+            if (!priceText) return null;
+            
+            const rates = {};
+
+            const buyMatch = priceText.match(/(?:الشراء|شراء)[\s\:]*(\d+[\.,]?\d*)/i);
+            if (buyMatch) rates.buy = parseFloat(buyMatch[1].replace(',', ''));
+
+            const sellMatch = priceText.match(/(?:البيع|بيع)[\s\:]*(\d+[\.,]?\d*)/i);
+            if (sellMatch) rates.sell = parseFloat(sellMatch[1].replace(',', ''));
+            
+            const syrianMatch = priceText.match(/(?:سوريا|ليرة|ل\.س|SYP)[\s\:]*(\d+[\.,]?\d*)/i);
+            if (syrianMatch) rates.syrian = parseFloat(syrianMatch[1].replace(',', ''));
+            
+            const dollarMatch = priceText.match(/(?:دولار|USD|دولار امريكي)[\s\:]*(\d+[\.,]?\d*)/i);
+            if (dollarMatch) rates.dollar = parseFloat(dollarMatch[1].replace(',', ''));
+            
+            if (!rates.buy && !rates.sell && !rates.syrian && !rates.dollar) {
+                const numbers = priceText.match(/\d{3,}[\.,]?\d*/g);
+                if (numbers && numbers.length > 0) {
+                    rates.general = parseFloat(numbers[0].replace(',', ''));
+                }
+            }
+            
+            return rates;
+        }
+
+        function parseNumericPrice(candidates) {
+            for (const raw of candidates) {
+                if (raw === undefined || raw === null || raw === '') continue;
+                const cleaned = String(raw).replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660))
+                    .replace(/[٬,]/g, '')
+                    .trim();
+                const num = parseFloat(cleaned);
+                if (!isNaN(num) && num > 0) {
+                    return Math.round(num * 100) / 100;
+                }
+            }
+            return 0;
+        }
+
+        function normalizeProductName(rawName) {
+            let name = String(rawName || '').trim();
+            name = name.replace(/[\u200B-\u200F\uFEFF]/g, '');
+            name = name.replace(/[_]{1,}/g, ' ');
+            name = name.replace(/[-]{2,}/g, ' ');
+            name = name.replace(/\s{2,}/g, ' ');
+            name = name.replace(/\b[A-Z0-9]{6,}\b/g, m => /\d/.test(m) && /[A-Z]/.test(m) ? '' : m);
+            name = name.replace(/\s{2,}/g, ' ').trim();
+            if (!name) name = String(rawName || '').trim();
+            return name;
+        }
+
+        async function fetchProducts(forceRefresh = false) {
+            const now = Date.now();
+            
+            if (!forceRefresh && cachedProducts && (now - productsLastFetch) < CACHE_DURATION) {
+                return cachedProducts;
+            }
+            
+            try {
+                const proxyUrls = [
+                    `https://api.allorigins.win/raw?url=${encodeURIComponent(PRODUCTS_API_URL)}`,
+                    `https://corsproxy.io/?${encodeURIComponent(PRODUCTS_API_URL)}`,
+                    `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(PRODUCTS_API_URL)}`
+                ];
+                
+                let products = null;
+                
+                for (const proxyUrl of proxyUrls) {
+                    try {
+                        const controller = new AbortController();
+                        setTimeout(() => controller.abort(), 10000);
+                        
+                        const response = await fetch(proxyUrl, {
+                            signal: controller.signal,
+                            headers: { "api-token": PRODUCTS_API_TOKEN }
+                        });
+                        
+                        if (response.ok) {
+                            const text = await response.text();
+                            const data = JSON.parse(text);
+                            if (Array.isArray(data)) products = data;
+                            else if (data.data && Array.isArray(data.data)) products = data.data;
+                            else if (data.products && Array.isArray(data.products)) products = data.products;
+                            
+                            if (products && products.length > 0) break;
+                        }
+                    } catch (error) {}
+                }
+                
+                if (!products && cachedProducts) return cachedProducts;
+                if (!products || products.length === 0) return null;
+                
+                const enhancedProducts = products.map(p => {
+                    const sellCandidates = [
+                        p.sale_price, p.selling_price, p.sell_price, p.sellPrice,
+                        p.retail_price, p.customer_price, p.final_price, p.total_price,
+                        p.price_syp, p.priceSyp, p.price, p.amount, p.value
+                    ];
+                    const buyCandidates = [
+                        p.buy_price, p.buyPrice, p.purchase_price, p.cost_price,
+                        p.wholesale_price, p.cost
+                    ];
+
+                    const parsedSell = parseNumericPrice(sellCandidates);
+                    const parsedBuy = parseNumericPrice(buyCandidates);
+
+                    const price = parsedSell > 0 ? parsedSell : (parsedBuy > 0 ? parsedBuy : 0);
+                    const costPrice = parsedBuy > 0 ? parsedBuy : null;
+
+                    const rawName = p.name || p.title || p.product_name || p.label || '';
+                    const name = normalizeProductName(rawName);
+
+                    return {
+                        name,
+                        price,
+                        costPrice,
+                        isValidPrice: price > 0,
+                        description: p.description || '',
+                        nameLower: name.toLowerCase()
+                    };
+                });
+                
+                const validProducts = enhancedProducts.filter(p => p.isValidPrice);
+                const sortedAsc = [...validProducts].sort((a, b) => a.price - b.price);
+                
+                cachedProducts = {
+                    raw: enhancedProducts,
+                    validRaw: validProducts,
+                    total: enhancedProducts.length,
+                    cheapest: sortedAsc.slice(0, 20),
+                    mostExpensive: [...validProducts].sort((a, b) => b.price - a.price).slice(0, 20),
+                    gamingProducts: enhancedProducts.filter(p => 
+                        p.nameLower.includes('pubg') || p.nameLower.includes('free fire') || 
+                        p.nameLower.includes('mobile legend') || p.nameLower.includes('cod') ||
+                        p.nameLower.includes('ببجي') || p.nameLower.includes('فري فاير')
+                    )
+                };
+                
+                productsLastFetch = now;
+                
+                return cachedProducts;
+                
+            } catch (error) {
+                return cachedProducts;
+            }
+        }
+
+        function normalizeDigits(str) {
+            return str.replace(/[٠-٩]/g, d => String(d.charCodeAt(0) - 0x0660))
+                      .replace(/[۰-۹]/g, d => String(d.charCodeAt(0) - 0x06F0));
+        }
+
+        function searchProducts(query, productsData) {
+            if (!productsData || !productsData.raw) return [];
+            
+            const q = normalizeDigits(query.toLowerCase().trim());
+            
+            const gameKeywords = {
+                'pubg': ['pubg', 'ببجي', 'بابجي', 'بوبجي', 'player unknown', 'باتل جراوند'],
+                'freefire': ['free fire', 'فري فاير', 'فري', 'freefire', 'جيرينا'],
+                'mobilelegend': ['mobile legend', 'موبايل ليجند', 'mlbb', 'ml', 'موبايل'],
+                'cod': ['call of duty', 'كول اوف ديوتي', 'كود', 'codm'],
+                'fortnite': ['fortnite', 'فورتنايت', 'فورت'],
+                'battlefield': ['battlefield', 'باتل فيلد', 'باتلفيلد'],
+                'pubg_uc': ['uc', 'يوسي', 'unknown cash', 'شحن pubg', 'شدة', 'شدات', 'شدّة', 'شدّات'],
+                'pubg_prime': ['prime', 'بريميوم', 'برايم', 'اشتراك pubg'],
+                'diamonds': ['diamond', 'دايموند', 'الماس', 'جواهر', 'gems', 'ماسات'],
+                'topup': ['شحن', 'top up', 'topup', 'recharge', 'رصيد', 'تعبئة']
+            };
+            
+            const matchedGames = [];
+            for (const [game, keywords] of Object.entries(gameKeywords)) {
+                if (keywords.some(k => q.includes(k))) {
+                    matchedGames.push(game);
+                }
+            }
+            
+            const isCurrencyQuestion = q.includes('سعر الصرف') || q.includes('الدولار') ||
+                q.includes('الليرة') || q.includes('تحويل العملة') || q.includes('سعر الدولار');
+            if (isCurrencyQuestion && matchedGames.length === 0) {
+                return null;
+            }
+            
+            const queryNumbers = (q.match(/\d+/g) || []).map(n => n.trim());
+
+            if (matchedGames.length > 0) {
+                let results = productsData.raw.filter(product => {
+                    return matchedGames.some(game => {
+                        const keywords = gameKeywords[game];
+                        return keywords.some(k => product.nameLower.includes(k));
+                    });
+                });
+
+                if (queryNumbers.length > 0) {
+                    const exactMatches = results.filter(p =>
+                        queryNumbers.some(num => new RegExp(`(^|[^0-9])${num}([^0-9]|$)`).test(normalizeDigits(p.nameLower)))
+                    );
+                    if (exactMatches.length > 0) results = exactMatches;
+                }
+                
+                results.sort((a, b) => {
+                    const aScore = matchedGames.filter(g => 
+                        gameKeywords[g].some(k => a.nameLower.includes(k))
+                    ).length;
+                    const bScore = matchedGames.filter(g => 
+                        gameKeywords[g].some(k => b.nameLower.includes(k))
+                    ).length;
+                    return bScore - aScore;
+                });
+                
+                return results.slice(0, 10);
+            }
+            
+            if (q.includes('أرخص') || q.includes('ارخص')) return productsData.cheapest.slice(0, 10);
+            if (q.includes('أغلى') || q.includes('اغلى')) return productsData.mostExpensive.slice(0, 10);
+            
+            const searchTerms = q.split(/\s+/).filter(w => w.length >= 2);
+            if (searchTerms.length > 0) {
+                const results = productsData.raw.filter(p => 
+                    searchTerms.some(term => p.nameLower.includes(term))
+                ).slice(0, 5);
+                if (results.length > 0) return results;
+            }
+            
+            return productsData.cheapest.slice(0, 5);
+        }
+
+        function translateProductName(name) {
+            const translations = {
+                'pubg mobile': 'ببجي موبايل',
+                'pubg': 'ببجي',
+                'mobile legend': 'موبايل ليجند',
+                'mobile legends': 'موبايل ليجندز',
+                'free fire': 'فري فاير',
+                'call of duty': 'كول اوف ديوتي',
+                'clash of clans': 'كلاش أوف كلانس',
+                'clash royale': 'كلاش رويال',
+                'brawl stars': 'براول ستارز',
+                'fortnite': 'فورتنايت',
+                'battlefield': 'باتل فيلد',
+                'delta force': 'دلتا فورس',
+                'hay day': 'هاي داي',
+                'prime': 'برايم',
+                'premium': 'بريميوم',
+                'subscription': 'اشتراك',
+                'plan': 'باقة',
+                'gift card': 'بطاقة هدايا',
+                'one month': 'شهر واحد',
+                'year': 'سنة',
+                'yearly': 'سنوي',
+                'month': 'شهر',
+                'months': 'أشهر',
+                'week': 'أسبوع',
+                'weekly': 'أسبوعي',
+                'plus': 'بلس',
+                'pro': 'برو',
+                'ultra': 'الترا',
+                'lite': 'لايت',
+                'diamond': 'ماس',
+                'diamonds': 'ماسات',
+                'coins': 'عملات',
+                'coin': 'عملة',
+                'points': 'نقاط',
+                'gems': 'جواهر',
+                'uc': 'يوسي',
+                'top up': 'شحن',
+                'topup': 'شحن',
+                'recharge': 'شحن',
+                'balance': 'رصيد',
+                'credit': 'رصيد',
+                'card': 'بطاقة',
+                'gift': 'هدية',
+                'voucher': 'قسيمة',
+                'code': 'كود',
+                'key': 'مفتاح',
+                'account': 'حساب',
+                'visa': 'فيزا',
+                'mastercard': 'ماستركارد',
+                'google play': 'جوجل بلاي',
+                'itunes': 'ايتونز',
+                'apple id': 'آبل آيدي',
+                'playstation': 'بلايستيشن',
+                'psn': 'بلايستيشن نتورك',
+                'xbox': 'إكس بوكس',
+                'steam': 'ستيم',
+                'razer gold': 'ريزر جولد',
+                'netflix': 'نتفليكس',
+                'shahid': 'شاهد',
+                'youtube': 'يوتيوب',
+                'telegram': 'تيليجرام',
+                'whatsapp': 'واتساب',
+                'tiktok': 'تيك توك',
+                'snapchat': 'سناب شات',
+                'instagram': 'انستغرام'
+            };
+
+            let translated = normalizeProductName(name);
+
+            translated = translated.replace(/for\s+one\s+month/gi, 'لمدة شهر واحد');
+            translated = translated.replace(/for\s+(\d+)\s+months?/gi, 'لمدة $1 أشهر');
+            translated = translated.replace(/(\d+)\s*x\s*(\d+)/gi, '$1×$2');
+
+            const sortedEntries = Object.entries(translations).sort((a, b) => b[0].length - a[0].length);
+            for (const [eng, ar] of sortedEntries) {
+                translated = translated.replace(new RegExp(`\\b${eng.replace(/\s+/g, '\\s+')}\\b`, 'gi'), ar);
+            }
+
+            translated = translated.replace(/\s{2,}/g, ' ').trim();
+            return translated || name;
+        }
+
+        function cleanAIText(text) {
+            if (!text) return text;
+            let cleaned = text
+                .replace(/[\u4E00-\u9FFF\u3400-\u4DBF]/g, '')
+                .replace(/[\u3040-\u30FF\u31F0-\u31FF]/g, '')
+                .replace(/[\uAC00-\uD7AF]/g, '')
+                .replace(/[\u200B-\u200F\uFEFF]/g, '');
+            
+            cleaned = cleaned.replace(/[ \t]{2,}/g, ' ').replace(/\n{3,}/g, '\n\n');
+            return cleaned.trim();
+        }
+
+        function generateSmartResponse(query) {
+            const q = query.toLowerCase().trim();
+            
+            if (q.includes('سعر الصرف') || q.includes('سعر الدولار') || q.includes('الدولار') || 
+                q.includes('الليرة') || q.includes('تحويل') || q.includes('كم سعر الدولار')) {
+                
+                if (!latestPriceMessage || !latestPriceMessage.text) {
+                    return `💱 أسعار الصرف غير متوفرة حالياً.\n\nجاري تحديث البيانات من قناة ${TARGET_CHANNEL_USERNAME}...\n\nيمكنك الضغط على زر "💱 أسعار الصرف" للاطلاع على آخر تحديث.`;
+                }
+                
+                const rates = parseExchangeRates(latestPriceMessage.text);
+                
+                let response = `💱 أسعار الصرف الحالية (آخر تحديث: ${latestPriceMessage.date.toLocaleString('ar-SA')}):\n\n`;
+                
+                if (rates.buy) {
+                    response += `🇸🇾 الشراء: ${rates.buy.toLocaleString()} ل.س\n`;
+                }
+                if (rates.sell) {
+                    response += `🇸🇾 البيع: ${rates.sell.toLocaleString()} ل.س\n`;
+                }
+                if (!rates.buy && !rates.sell && rates.syrian) {
+                    response += `🇸🇾 سعر الدولار مقابل الليرة السورية: ${rates.syrian.toLocaleString()} ل.س\n`;
+                }
+                if (rates.dollar) {
+                    response += `💵 سعر الدولار: ${rates.dollar}\n`;
+                }
+                if (!rates.buy && !rates.sell && !rates.syrian && rates.general) {
+                    response += `💰 سعر الصرف: ${rates.general.toLocaleString()}\n`;
+                }
+                
+                response += `\n📋 النص الكامل:\n${latestPriceMessage.text.substring(0, 300)}`;
+                
+                const conversionRate = rates.sell || rates.syrian || rates.general;
+                if (conversionRate) {
+                    response += `\n\n🧮 أمثلة للتحويل:\n`;
+                    response += `• 10 دولار = ${(10 * conversionRate).toLocaleString()} ل.س\n`;
+                    response += `• 50 دولار = ${(50 * conversionRate).toLocaleString()} ل.س\n`;
+                    response += `• 100 دولار = ${(100 * conversionRate).toLocaleString()} ل.س\n`;
+                }
+                
+                return response;
+            }
+            
+            if (q.includes('حساب') || q.includes('تسجيل') || q.includes('اشتراك') && !q.includes('نتفليكس') && !q.includes('شاهد')) {
+                return `📝 لفتح حساب جديد:\n\n1️⃣ زر ${SITE_INFO.url}\n2️⃣ اضغط "تسجيل"\n3️⃣ أدخل بريدك وكلمة مرور\n4️⃣ أكد الحساب\n\nللمساعدة الفورية، تواصل معنا واتساب: ${SITE_INFO.support.whatsapp}`;
+            }
+            
+            if (q.includes('دفع') || q.includes('طريقة') || q.includes('شحن رصيد')) {
+                return `💳 طرق الدفع المتاحة:\n\n${SITE_INFO.payment.map((m, i) => `${i+1}. ${m}`).join('\n')}\n\nلأي استفسار إضافي، واتساب: ${SITE_INFO.support.whatsapp}`;
+            }
+            
+            if (q.includes('دعم') || q.includes('رقم') || q.includes('واتس') || q.includes('اتصال')) {
+                return `📞 تواصل مع الدعم:\n\n• واتساب: ${SITE_INFO.support.whatsapp}\n• تيليجرام: ${SITE_INFO.support.telegram}\n• بريد: ${SITE_INFO.support.email}`;
+            }
+            
+            if (q.includes('توصيل') || q.includes('شحن الطلب') || q.includes('استلام الطلب')) {
+                return `📦 كل خدماتنا رقمية بالكامل، ما في عنا توصيل مادي أو شحن فعلي لأي شيء.\n\nالمنتجات تُسلَّم مباشرة داخل حسابك أو كرصيد/كود إلكتروني خلال دقائق حتى 24 ساعة كحد أقصى.\n\nلأي استفسار: واتساب ${SITE_INFO.support.whatsapp}`;
+            }
+            
+            if (q.includes('استثمار') || q.includes('تداول')) {
+                return `ما عنا خدمات استثمار أو تداول، خدماتنا تقتصر على الشحن الرقمي والتحويلات المالية فقط.\n\nللاستفسار عن خدماتنا الفعلية، واتساب: ${SITE_INFO.support.whatsapp}`;
+            }
+            
+            if (cachedProducts) {
+                const results = searchProducts(query, cachedProducts);
+                
+                if (results === null) {
+                    return generateSmartResponse('سعر الصرف');
+                }
+                
+                if (results && results.length > 0) {
+                    const validResults = results.filter(p => p.isValidPrice).sort((a, b) => a.price - b.price);
+                    
+                    if (validResults.length > 0) {
+                        let response = `📦 تم العثور على ${validResults.length} منتج:\n\n`;
+                        
+                        validResults.forEach((p, i) => {
+                            const nameTranslated = translateProductName(p.name);
+                            response += `${i+1}. ${nameTranslated}\n`;
+                            response += `   💵 ${p.price.toLocaleString()} ${BASE_CURRENCY_LABEL}\n\n`;
+                        });
+                        
+                        return response;
+                    } else {
+                        return `⚠️ لقيت المنتج المطلوب بالاسم، لكن سعره غير متوفر بدقة بالنظام حالياً (خلل بيانات مؤقت).\n\nللتأكد من السعر الصحيح فوراً، تواصل معنا واتساب: ${SITE_INFO.support.whatsapp}`;
+                    }
+                }
+            }
+            
+            return `❓ لم أفهم سؤالك. يمكنني مساعدتك في:\n\n🎮 منتجات الشحن (ببجي، فري فاير...)\n💱 أسعار الصرف وتحويل العملات\n📝 فتح حساب\n💳 طرق الدفع\n📞 التواصل مع الدعم\n\nإذا ما لقيت جوابك، تواصل مباشرة واتساب: ${SITE_INFO.support.whatsapp}`;
+        }
+
+        async function openModal(type) {
+            currentModalType = type;
+            toggleMenu();
+            
+            const overlay = document.getElementById('modal-overlay');
+            const title = document.getElementById('modal-title');
+            const iconContainer = document.getElementById('modal-icon-container');
+            const body = document.getElementById('modal-body');
+            const footer = document.getElementById('chat-footer');
+            const suggestionsBar = document.getElementById('chat-suggestions');
+
+            overlay.classList.remove('hidden');
+
+            if (type === 'prices') {
+                footer.classList.add('hidden');
+                suggestionsBar.classList.add('hidden');
+                document.getElementById('prices-footer').classList.remove('hidden');
+                title.innerText = "💱 أسعار الصرف";
+                iconContainer.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 7h8m0 0v8m0-8l-8 8-4-4-6 6"></path></svg>`;
+                
+                body.innerHTML = `<div class="text-center py-12"><div class="w-8 h-8 border-2 border-brand border-t-transparent rounded-full animate-spin mx-auto"></div><p class="mt-3 text-zinc-400">جاري التحميل...</p></div>`;
+
+                const priceData = await fetchLatestPriceFromChannel();
+                
+                if (priceData && priceData.text) {
+                    const rates = parseExchangeRates(priceData.text);
+                    
+                    let html = `
+                        <div class="bg-green-500/10 px-3 py-2 rounded-xl text-[10px] text-green-400 mb-3">
+                            ✅ آخر تحديث: ${priceData.date.toLocaleString('ar-SA')}
+                        </div>
+                        <div class="bg-zinc-950 p-5 rounded-2xl text-sm whitespace-pre-wrap mb-3">
+                            ${priceData.text}
+                        </div>`;
+                    
+                    if (rates && (rates.sell || rates.syrian || rates.general)) {
+                        const rate = rates.sell || rates.syrian || rates.general;
+                        html += `
+                        <div class="bg-zinc-800 p-4 rounded-2xl text-xs">
+                            <p class="font-bold mb-2">🧮 حاسبة سريعة (حسب سعر البيع):</p>
+                            <p>10$ = ${(10 * rate).toLocaleString()} ل.س</p>
+                            <p>50$ = ${(50 * rate).toLocaleString()} ل.س</p>
+                            <p>100$ = ${(100 * rate).toLocaleString()} ل.س</p>
+                        </div>`;
+                    }
+                    
+                    body.innerHTML = html;
+                } else {
+                    body.innerHTML = `<div class="text-center py-12 text-zinc-500">📭 لا توجد تحديثات</div>`;
+                }
+
+            } else if (type === 'chat') {
+                footer.classList.remove('hidden');
+                suggestionsBar.classList.remove('hidden');
+                document.getElementById('prices-footer').classList.add('hidden');
+                
+                if (!cachedProducts || !latestPriceMessage) {
+                    body.innerHTML = `<div class="text-center py-12"><div class="w-8 h-8 border-2 border-brand border-t-transparent rounded-full animate-spin mx-auto"></div><p class="mt-3 text-zinc-400">جاري تحميل البيانات...</p></div>`;
+                    await Promise.all([fetchProducts(), fetchLatestPriceFromChannel()]);
+                }
+                
+                title.innerText = `المساعد الذكي | ${SITE_INFO.name}`;
+                iconContainer.innerHTML = `<svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 10h.01M12 10h.01M16 10h.01M9 16H5a2 2 0 01-2-2V6a2 2 0 02-2-2h14a2 2 0 012 2v8a2 2 0 01-2 2h-5l-5 5v-5z"></path></svg>`;
+                renderChat();
+            }
+        }
+
+        async function refreshPrices() {
+            const body = document.getElementById('modal-body');
+            body.innerHTML = `<div class="text-center py-12"><div class="w-8 h-8 border-2 border-brand border-t-transparent rounded-full animate-spin mx-auto"></div></div>`;
+            
+            const priceData = await fetchLatestPriceFromChannel();
+            
+            if (priceData && priceData.text) {
+                const rates = parseExchangeRates(priceData.text);
+                let html = `
+                    <div class="bg-green-500/10 px-3 py-2 rounded-xl text-[10px] text-green-400 mb-3">
+                        ✅ ${priceData.date.toLocaleString('ar-SA')}
+                    </div>
+                    <div class="bg-zinc-950 p-5 rounded-2xl text-sm whitespace-pre-wrap">
+                        ${priceData.text}
+                    </div>`;
+                
+                if (rates && (rates.sell || rates.syrian || rates.general)) {
+                    const rate = rates.sell || rates.syrian || rates.general;
+                    html += `
+                    <div class="bg-zinc-800 p-4 rounded-2xl text-xs mt-3">
+                        <p class="font-bold mb-2">🧮 أمثلة (حسب سعر البيع):</p>
+                        <p>100$ = ${(100 * rate).toLocaleString()} ل.س</p>
+                    </div>`;
+                }
+                
+                body.innerHTML = html;
+            } else {
+                body.innerHTML = `<div class="text-center py-12 text-zinc-500">📭 لا توجد تحديثات</div>`;
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('modal-overlay').classList.add('hidden');
+            currentModalType = null;
+        }
+
+        function renderChat() {
+            const body = document.getElementById('modal-body');
+            body.innerHTML = "";
+            
+            const chatWrapper = document.createElement('div');
+            chatWrapper.className = "space-y-3.5 flex flex-col";
+            
+            chatMessages.forEach(msg => {
+                const isUser = msg.sender === 'user';
+                const row = document.createElement('div');
+                row.className = `flex ${isUser ? 'justify-start flex-row-reverse' : 'justify-start'} items-end gap-2`;
+
+                const avatar = document.createElement('div');
+                avatar.className = `w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[11px] ${
+                    isUser ? 'bg-zinc-800 text-zinc-300' : 'bg-brand/15 text-brand border border-brand/25'
+                }`;
+                avatar.innerText = isUser ? '🙂' : '🤖';
+                
+                const bubble = document.createElement('div');
+                bubble.className = `px-4 py-2.5 rounded-2xl text-xs leading-relaxed max-w-[80%] shadow-sm ${
+                    isUser 
+                    ? 'bg-brand text-zinc-950 font-semibold rounded-tr-sm' 
+                    : 'bg-zinc-850 text-zinc-100 rounded-tl-sm border border-zinc-800/80 whitespace-pre-wrap'
+                }`;
+                bubble.innerText = msg.text;
+                
+                row.appendChild(avatar);
+                row.appendChild(bubble);
+                chatWrapper.appendChild(row);
+            });
+            
+            body.appendChild(chatWrapper);
+            body.scrollTop = body.scrollHeight;
+        }
+
+        function sendSuggestion(text) {
+            document.getElementById('userInput').value = text;
+            sendAI();
+        }
+
+        function buildSystemInstruction(userQuestion) {
+            let matchedProductsText;
+            let zeroPriceWarning = '';
+            let catalogStatusText;
+
+            if (!cachedProducts) {
+                catalogStatusText = '⚠️ حالة النظام الآن: فشل تحميل كتالوج المنتجات بالكامل (مشكلة اتصال تقنية مؤقتة)، وليس لديك أي بيانات عن أي منتج حالياً — لا تخص هذه المشكلة منتجاً معيناً. في هذه الحالة: لا تقل أبداً "هذا المنتج تحديداً غير متوفر" أو "الأسعار الخاصة به غير دقيقة"، بل قل بوضوح إن هناك مشكلة تقنية مؤقتة بتحميل بيانات المتجر حالياً وأنك غير قادر على تأكيد أي سعر أو توفر لأي منتج في هذه اللحظة، ووجّه العميل مباشرة للموقع money3maker.com أو واتساب الدعم للتأكد فوراً.';
+                matchedProductsText = 'كتالوج المنتجات غير محمّل حالياً بالكامل (راجع حالة النظام أعلاه).';
+            } else {
+                catalogStatusText = `✅ كتالوج المنتجات محمّل بنجاح (${cachedProducts.total} منتج). أي قول بأن منتجاً "غير متوفر" يجب أن يكون مبنياً فعلياً على عدم وجوده ضمن نتائج البحث أدناه، وليس افتراضاً.`;
+                const rawMatches = searchProducts(userQuestion, cachedProducts);
+                if (Array.isArray(rawMatches) && rawMatches.length > 0) {
+                    const validMatches = rawMatches.filter(p => p.isValidPrice);
+                    const invalidMatches = rawMatches.filter(p => !p.isValidPrice);
+
+                    if (validMatches.length > 0) {
+                        const sortedMatches = [...validMatches].sort((a, b) => a.price - b.price);
+                        matchedProductsText = `منتجات مطابقة لسؤال العميل تحديداً (الاسم المفهوم - السعر بالليرة السورية، مرتبة من الأرخص للأغلى):\n` +
+                            sortedMatches.slice(0, 10).map(p => `- ${translateProductName(p.name)} : ${Math.round(p.price).toLocaleString()} ل.س`).join('\n');
+                    } else {
+                        matchedProductsText = 'تم العثور على أسماء منتجات مطابقة لكن بدون سعر صحيح (راجع تحذير البيانات أدناه).';
+                    }
+
+                    if (invalidMatches.length > 0) {
+                        zeroPriceWarning = `\n⚠️ تحذير بيانات مهم جداً: هناك أسماء منتجات مطابقة جزئياً لكن سعرها في النظام يظهر كـ 0 أو غير صحيح (خلل بيانات مؤقت لهذه المنتجات تحديداً): ${invalidMatches.slice(0, 5).map(p => p.name).join('، ')}.\nممنوع منعاً باتاً أن تذكر لهذه المنتجات أي رقم سعر (0 أو غيره)، وممنوع أن تقول "سعر خاص" أو تخترع أي مبرر. بدلاً من ذلك قل للعميل بوضوح أن المنتج نفسه موجود لكن سعره غير متوفر حالياً بدقة، ووجّهه للدعم على واتساب ${SITE_INFO.support.whatsapp}.`;
+                    }
+                } else {
+                    matchedProductsText = 'تم البحث فعلياً ضمن كتالوج المنتجات المحمّل (وهو غير فارغ)، ولم يتم العثور على أي منتج مطابق لطلب العميل. هذا يعني أن هذا المنتج تحديداً غير متوفر لدينا فعلاً — يمكنك قول ذلك بثقة.';
+                }
+            }
+
+            const totalProductsText = catalogStatusText;
+
+            const priceContext = latestPriceMessage && latestPriceMessage.text
+                ? `آخر تحديث لأسعار الصرف بتاريخ ${latestPriceMessage.date.toLocaleString('ar-SA')}:\n${latestPriceMessage.text.substring(0, 500)}`
+                : 'لا يوجد تحديث حالي لأسعار الصرف.';
+
+            return `أنت المساعد الذكي الرسمي داخل تطبيق متجر "${SITE_INFO.name}" (${SITE_INFO.url}).
+أنت تتحدث ضمن محادثة مستمرة مع نفس العميل — راجع كامل الرسائل السابقة في هذه المحادثة قبل الرد، ولا تجاوب وكأن كل سؤال منفصل. إذا سأل العميل سؤال متابعة أو استخدم "هو" أو "هاي" أو أشار لشيء ذكره قبل قليل، افهمه من سياق المحادثة السابقة مباشرة.
+
+=== معرفة شاملة عن المتجر وخدماته وسياساته ===
+${STORE_KNOWLEDGE}
+
+=== بيانات حية من النظام ===
+${totalProductsText}
+${matchedProductsText}
+${zeroPriceWarning}
+
+بيانات أسعار الصرف الحالية (دولار أمريكي مقابل ليرة سورية):
+${priceContext}
+
+=== قاعدة أسعار البيع والشراء الداخلية (مهم جداً) ===
+- كل سعر يظهر لك في قائمة "منتجات مطابقة" هو سعر البيع النهائي للعميل بالليرة السورية فقط، وهو السعر الوحيد الذي يجوز ذكره للعميل مهما كان السؤال.
+- إذا وُجد للمنتج نفسه سعر شراء أو سعر تكلفة داخلي (سعر التوريد من المورد)، فهذا رقم داخلي خاص بإدارة المتجر ولا علاقة له بالعميل إطلاقاً، ولا يجوز ذكره أو الإشارة إليه أو مقارنته بسعر البيع تحت أي ظرف، حتى لو طلب العميل ذلك صراحة.
+- لا تخلط أبداً بين "سعر البيع" (للعميل) و"سعر الصرف/الشراء والبيع لليرة السورية مقابل الدولار" المذكور في قسم أسعار الصرف أعلاه؛ هذان مفهومان مختلفان تماماً: الأول سعر منتج محدد، والثاني سعر تحويل عملة عام.
+
+=== قاعدة العملات (مهم جداً) ===
+- كل الأسعار في قسم "منتجات مطابقة" أعلاه مُخزَّنة أصلاً بالليرة السورية (${BASE_CURRENCY_LABEL}). هذه هي العملة الأساسية دائماً في قاعدة البيانات، بغض النظر عن لغة أو عملة سؤال العميل.
+- إذا سأل العميل عن سعر منتج بالليرة السورية مباشرة: اذكر السعر كما هو من قائمة "منتجات مطابقة" أعلاه، مقرَّباً لرقم صحيح مع الفاصلة الألفية، بدون أي عملية حسابية إضافية.
+- إذا سأل العميل عن سعر منتج بعملة أخرى (كالدولار الأمريكي)، اتبع هذا الترتيب دائماً:
+  1) خذ سعر المنتج الفعلي بالليرة السورية من قائمة "منتجات مطابقة" أعلاه (لا تخترعه أبداً).
+  2) خذ سعر الصرف الحالي (دولار/ليرة) من قسم "بيانات أسعار الصرف الحالية" أعلاه — استخدم سعر البيع تحديداً إن وُجد (وليس سعر الشراء) لأنه الأقرب لما يدفعه العميل فعلياً.
+  3) اقسم سعر المنتج بالليرة السورية على سعر الصرف للحصول على السعر بالدولار، واذكر الناتج مع ذكر تاريخ سعر الصرف المستخدم، بدقة رقمين عشريين كحد أقصى.
+  4) لا تفعل هذا التحويل إطلاقاً إذا لم يكن سعر الصرف متوفراً في البيانات أعلاه — بدلاً من ذلك أخبر العميل أن سعر الصرف غير محدَّث حالياً واعرض عليه السعر بالليرة السورية فقط.
+- لا تخلط أبداً بين عملة السؤال وعملة التخزين، ولا تفترض أبداً أن الأسعار المذكورة في قائمة المنتجات هي بالدولار.
+
+=== قواعد صارمة لمنع الأخطاء (الأهم على الإطلاق) ===
+1. ممنوع نهائياً اختراع أي سعر غير موجود حرفياً في البيانات أعلاه. إذا كان سعر منتج يظهر "0" أو غير موجود في قائمة "منتجات مطابقة"، فهذا يعني أن السعر غير متوفر حالياً — لا تكتب "0 ل.س" ولا "0 دولار" ولا "سعر خاص" أبداً؛ بدلاً من ذلك قل بوضوح إن السعر غير متوفر حالياً بدقة ووجّه العميل للدعم.
+2. إذا لم يكن هناك أي منتج مطابق فعلياً لما طلبه العميل ضمن "منتجات مطابقة"، قل ذلك بصراحة ولا تخترع فئات أو كميات وهمية.
+3. أجب حصراً بحروف عربية سليمة (ويمكن إنجليزية/أرقام/إيموجي شائعة عند الحاجة)، ولا تُدرج إطلاقاً أي حرف من لغات أخرى مثل الصينية أو اليابانية أو الكورية أو أي رموز غريبة لا معنى لها.
+4. أنهِ ردك دائماً كجملة كاملة ومفهومة.
+5. اكتب الأسعار دائماً كأرقام صحيحة مفصولة بفاصلة الآلاف للأسعار بالليرة السورية.
+6. ممنوع نهائياً استخدام رموز الماركداون الخام مثل ** أو #.
+7. عند عرض قوائم أسعار بها عدة فئات، اختصر واذكر فقط الفئات الأهم.
+
+=== كيف تفهم وتعرض المنتجات (مهم جداً) ===
+1. أسماء المنتجات القادمة من نظام المتجر قد تكون فوضوية أو غير مفهومة (بالإنجليزية، أو فيها رموز/أكواد زائدة). لا تنسخها كما هي حرفياً؛ افهم نوع الخدمة الحقيقي من الاسم (لعبة، فئة شحن، مدة اشتراك، عدد وحدات) ثم اذكره للعميل باسم عربي واضح ومختصر.
+2. لا تخترع اسم منتج غير موجود أصلاً، فقط أعد صياغة الاسم الموجود فعلياً بشكل مفهوم.
+3. عند عرض أكثر من منتج بنفس الاستجابة، رتّبها بشكل منطقي (من الأرخص للأغلى، أو حسب الفئة إن كانت من ألعاب مختلفة)، ولا تعرضها بترتيب عشوائي.
+4. إذا تشابهت عدة منتجات بنفس الاسم تقريباً (فروقها فقط بالكمية أو المدة)، اعرضها كقائمة مرتبة بنفس الفئة بدلاً من تكرار الشرح لكل واحد.
+5. افهم القصد الحقيقي من سؤال العميل بذكاء حتى لو كان مختصراً أو بلهجة عامية.
+6. أجب بشكل مباشر ومحدد قدر الإمكان، ورد بنفس اللغة أو اللهجة التي يكتب بها العميل.
+7. استخدم فقط الأسعار والمنتجات الموجودة فعلياً في البيانات أعلاه، ولا تُقرِّب أو تُخمِّن أي رقم.
+8. إذا سأل عن سياسة الخصوصية أو الدعم أو التسجيل أو التوثيق، استخدم قسم "معرفة شاملة عن المتجر" أعلاه بدقة تامة دون حذف أي خطوة.
+
+=== خدمات غير متوفرة (مهم) ===
+- ليس لدينا أي خدمة توصيل مادي أو استثمار أو تداول.
+
+=== حدود صارمة لموضوع الحديث ===
+- أنت مخصص حصراً للإجابة عما يتعلق بمتجر "${SITE_INFO.name}".
+- أي سؤال لا علاقة له بالمتجر يجب رفضه بأدب وتوجيه العميل لسؤال متعلق بالمتجر.
+- أي سؤال يخص المتجر لكن ما عندك معلومة كافية، وجّه العميل للدعم واتساب ${SITE_INFO.support.whatsapp} أو تيليجرام ${SITE_INFO.support.telegram}.
+- أسلوبك: ودود، احترافي، مختصر ومباشر، مع إيموجي مناسبة باعتدال.`;
+        }
+
+        function buildHistoryForGroq() {
+            return chatMessages
+                .slice(1)
+                .slice(-12)
+                .map(m => ({ role: m.sender === 'user' ? 'user' : 'assistant', content: m.text }));
+        }
+
+        function buildHistoryForGemini() {
+            return chatMessages
+                .slice(1)
+                .slice(-12)
+                .map(m => ({ role: m.sender === 'user' ? 'user' : 'model', parts: [{ text: m.text }] }));
+        }
+
+        async function getGroqReply(userQuestion) {
+            const systemInstruction = buildSystemInstruction(userQuestion);
+            const baseMessages = [
+                { role: "system", content: systemInstruction },
+                ...buildHistoryForGroq()
+            ];
+
+            async function callGroq(messages) {
+                const response = await nativeHttpPost("https://api.groq.com/openai/v1/chat/completions", {"Authorization": `Bearer ${GROQ_API_KEY}`}, {model:"llama-3.3-70b-versatile", messages, temperature:0.3, max_tokens:2048});
+
+                if (!response.ok) {
+                    const errText = await response.text().catch(() => '');
+                    throw new Error(`Groq HTTP ${response.status}: ${errText.substring(0, 300)}`);
+                }
+
+                const data = await response.json();
+                const choice = data?.choices?.[0];
+                const text = choice?.message?.content;
+                if (!text) throw new Error(`Groq رجع رد فارغ.`);
+                return { text, finishReason: choice.finish_reason };
+            }
+
+            let { text, finishReason } = await callGroq(baseMessages);
+            let fullText = text;
+            let messages = baseMessages;
+            let continuations = 0;
+
+            while (finishReason === 'length' && continuations < 3) {
+                messages = [
+                    ...messages,
+                    { role: 'assistant', content: fullText },
+                    { role: 'user', content: 'أكمل ردّك بالضبط من النقطة التي توقفت عندها.' }
+                ];
+                const cont = await callGroq(messages);
+                fullText += cont.text;
+                finishReason = cont.finishReason;
+                continuations++;
+            }
+
+            return fullText;
+        }
+
+        async function getGeminiReply(userQuestion) {
+            const systemInstruction = buildSystemInstruction(userQuestion);
+            const MODEL_CANDIDATES = ['gemini-flash-latest', 'gemini-2.5-flash', 'gemini-3.5-flash'];
+
+            async function callGemini(modelName, contents) {
+                const response = await nativeHttpPost(`https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${GEMINI_API_KEY}`, {}, {contents, systemInstruction:{parts:[{text:systemInstruction}]}, generationConfig:{temperature:0.3, maxOutputTokens:2048}});
+
+                if (!response.ok) {
+                    const errText = await response.text().catch(() => '');
+                    throw new Error(`[${modelName}] HTTP ${response.status}: ${errText.substring(0, 300)}`);
+                }
+
+                const data = await response.json();
+                const candidate = data?.candidates?.[0];
+                const text = candidate?.content?.parts?.[0]?.text;
+                if (!text) throw new Error(`[${modelName}] رجع رد فارغ.`);
+                return { text, finishReason: candidate.finishReason };
+            }
+
+            let lastError = null;
+            for (const modelName of MODEL_CANDIDATES) {
+                try {
+                    let contents = buildHistoryForGemini();
+                    let { text, finishReason } = await callGemini(modelName, contents);
+                    let fullText = text;
+                    let continuations = 0;
+
+                    while (finishReason === 'MAX_TOKENS' && continuations < 3) {
+                        contents = [
+                            ...contents,
+                            { role: 'model', parts: [{ text: fullText }] },
+                            { role: 'user', parts: [{ text: 'أكمل ردّك بالضبط من النقطة التي توقفت عندها.' }] }
+                        ];
+                        const cont = await callGemini(modelName, contents);
+                        fullText += cont.text;
+                        finishReason = cont.finishReason;
+                        continuations++;
+                    }
+
+                    return fullText;
+                } catch (err) {
+                    lastError = err;
+                }
+            }
+
+            throw lastError || new Error('فشل الاتصال بـ Gemini');
+        }
+
+        async function getHFReply(userQuestion) {
+            if (!HF_API_KEY || HF_API_KEY.includes('ضع_مفتاح')) {
+                throw new Error('مفتاح Hugging Face غير مُعدّ بعد');
+            }
+
+            const systemInstruction = buildSystemInstruction(userQuestion);
+            const baseMessages = [
+                { role: "system", content: systemInstruction },
+                ...buildHistoryForGroq()
+            ];
+
+            async function callHF(messages) {
+                const response = await nativeHttpPost("https://router.huggingface.co/v1/chat/completions", {"Authorization": `Bearer ${HF_API_KEY}`}, {model:"Qwen/Qwen2.5-72B-Instruct", messages, temperature:0.4, max_tokens:2048, top_p:0.95});
+
+                if (!response.ok) {
+                    const errText = await response.text().catch(() => '');
+                    throw new Error(`HF HTTP ${response.status}: ${errText.substring(0, 300)}`);
+                }
+
+                const data = await response.json();
+                const choice = data?.choices?.[0];
+                const text = choice?.message?.content;
+                if (!text) throw new Error(`HF رجع رد فارغ.`);
+                return { text, finishReason: choice.finish_reason };
+            }
+
+            let { text, finishReason } = await callHF(baseMessages);
+            let fullText = text;
+            let messages = baseMessages;
+            let continuations = 0;
+
+            while (finishReason === 'length' && continuations < 3) {
+                messages = [
+                    ...messages,
+                    { role: 'assistant', content: fullText },
+                    { role: 'user', content: 'أكمل ردّك بالضبط من النقطة التي توقفت عندها.' }
+                ];
+                const cont = await callHF(messages);
+                fullText += cont.text;
+                finishReason = cont.finishReason;
+                continuations++;
+            }
+
+            return fullText;
+        }
+
+        async function sendAI() {
+            const input = document.getElementById('userInput');
+            const text = input.value.trim();
+            if (!text) return;
+            
+            chatMessages.push({ sender: 'user', text: text });
+            input.value = "";
+            renderChat();
+            
+            const body = document.getElementById('modal-body');
+            const thinking = document.createElement('div');
+            thinking.className = 'flex justify-start items-end gap-2 mt-3.5';
+            thinking.innerHTML = `
+                <div class="w-6 h-6 shrink-0 rounded-full flex items-center justify-center text-[11px] bg-brand/15 text-brand border border-brand/25">🤖</div>
+                <div class="bg-zinc-850 border border-zinc-800/80 px-4 py-3 rounded-2xl rounded-tl-sm max-w-[80%] flex items-center gap-1.5">
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand/70 animate-bounce" style="animation-delay:0ms"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand/70 animate-bounce" style="animation-delay:150ms"></span>
+                    <span class="w-1.5 h-1.5 rounded-full bg-brand/70 animate-bounce" style="animation-delay:300ms"></span>
+                </div>
+            `;
+            body.appendChild(thinking);
+            body.scrollTop = body.scrollHeight;
+
+            let aiReply;
+            try {
+                aiReply = await getGroqReply(text);
+            } catch (groqErr) {
+                try {
+                    aiReply = await getGeminiReply(text);
+                } catch (geminiErr) {
+                    try {
+                        aiReply = await getHFReply(text);
+                    } catch (hfErr) {
+                        aiReply = generateSmartResponse(text);
+                    }
+                }
+            }
+
+            aiReply = cleanAIText(aiReply);
+            
+            if (thinking) thinking.remove();
+            chatMessages.push({ sender: 'ai', text: aiReply });
+            renderChat();
+        }
+
+        document.getElementById('userInput').addEventListener('keydown', function(e) {
+            if (e.key === 'Enter') sendAI();
+        });
+
+        Promise.all([fetchProducts(), fetchLatestPriceFromChannel()]);
+    </script>
+</body>
+</html>

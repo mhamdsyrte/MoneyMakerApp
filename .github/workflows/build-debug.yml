@@ -1,0 +1,33 @@
+name: Build Debug APK
+on: push
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+      - name: Setup Gradle wrapper
+        run: |
+          if [ ! -f gradlew ]; then
+            gradle wrapper --gradle-version 8.7
+          fi
+          chmod +x gradlew
+      - name: Inject API keys into index.html
+        env:
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          GROQ_API_KEY: ${{ secrets.GROQ_API_KEY }}
+          HF_API_KEY: ${{ secrets.HF_API_KEY }}
+        run: |
+          sed -i "s|__GEMINI_API_KEY__|${GEMINI_API_KEY}|g" app/src/main/assets/index.html
+          sed -i "s|__GROQ_API_KEY__|${GROQ_API_KEY}|g" app/src/main/assets/index.html
+          sed -i "s|__HF_API_KEY__|${HF_API_KEY}|g" app/src/main/assets/index.html
+      - name: Build debug APK
+        run: ./gradlew assembleDebug --stacktrace
+      - name: Upload APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-debug-apk
+          path: app/build/outputs/apk/debug/app-debug.apk

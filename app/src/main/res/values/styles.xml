@@ -1,0 +1,3 @@
+<resources>
+    <style name="Theme.MoneyMaker" parent="Theme.AppCompat.Light.NoActionBar" />
+</resources>
